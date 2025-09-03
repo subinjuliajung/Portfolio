@@ -23,24 +23,12 @@ export default function ContactForm() {
     e.preventDefault()
     setIsSubmitting(true)
 
-    try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      })
-
-      if (response.ok) {
-        setSubmitted(true)
-        setFormData({ name: '', email: '', subject: '', message: '' })
-      }
-    } catch (error) {
-      console.error('Error sending message:', error)
-    } finally {
+    // Simulate form submission for now
+    setTimeout(() => {
+      setSubmitted(true)
+      setFormData({ name: '', email: '', subject: '', message: '' })
       setIsSubmitting(false)
-    }
+    }, 1000)
   }
 
   if (submitted) {
