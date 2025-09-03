@@ -1,5 +1,5 @@
-import Navigation from '@/components/Navigation'
-import CyworldBlog from '@/components/CyworldBlog'
+import Navigation from '../../components/Navigation'
+import CyworldBlog from '../../components/CyworldBlog'
 
 export default function BlogPage() {
   return (
