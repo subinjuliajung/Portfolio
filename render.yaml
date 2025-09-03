@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: fashion-portfolio
+    env: node
+    plan: starter
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: fashion-portfolio-db
+          property: connectionString
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASSWORD
+        sync: false
+      - key: EMAIL_TO
+        sync: false
+      - key: UPLOADCARE_PUBLIC_KEY
+        sync: false
+      - key: UPLOADCARE_SECRET_KEY
+        sync: false
+      - key: NEXTAUTH_SECRET
+        generateValue: true
+      - key: NEXTAUTH_URL
+        value: https://fashion-portfolio.onrender.com
+
+databases:
+  - name: fashion-portfolio-db
+    plan: starter
