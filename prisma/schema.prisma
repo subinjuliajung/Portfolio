@@ -1,0 +1,109 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Post {
+  id          String   @id @default(cuid())
+  title       String
+  content     String
+  excerpt     String?
+  image       String?
+  slug        String   @unique
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Cyworld-style metadata
+  mood        String?
+  weather     String?
+  bgm         String?
+  likes       Int      @default(0)
+  
+  // Relations
+  comments    Comment[]
+  categories  PostCategory[]
+  
+  @@map("posts")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  author    String
+  email     String?
+  createdAt DateTime @default(now())
+  
+  // Relations
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+  
+  @@map("comments")
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  
+  // Relations
+  posts       PostCategory[]
+  portfolios  PortfolioCategory[]
+  
+  @@map("categories")
+}
+
+model PostCategory {
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId     String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String
+  
+  @@id([postId, categoryId])
+  @@map("post_categories")
+}
+
+model Portfolio {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  image       String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  categories  PortfolioCategory[]
+  
+  @@map("portfolio")
+}
+
+model PortfolioCategory {
+  portfolio    Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  portfolioId  String
+  category     Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId   String
+  
+  @@id([portfolioId, categoryId])
+  @@map("portfolio_categories")
+}
+
+model Contact {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String
+  createdAt DateTime @default(now())
+  read      Boolean  @default(false)
+  
+  @@map("contacts")
+}
